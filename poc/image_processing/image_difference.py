@@ -52,13 +52,14 @@ def compare_array_of_images(images):
         before = cv2.imread(images[index])
         after = cv2.imread(images[index +1])
 
-        image_difference(before, after, result_path=f"./results/cam/mask_{index}.jpg")
+        image_difference(before, after, result_path=f"./data/example_results/image_difference/mask_{index}.jpg")
 
+# EXAMPLE
 images = [
-    "./cam/scheibe.jpg",
-    "./cam/1.jpg",
-    "./cam/2.jpg",
-    "./cam/3.jpg",
+    "./data/webcam/scheibe.jpg",
+    "./data/webcam/1.jpg",
+    "./data/webcam/2.jpg",
+    "./data/webcam/3.jpg",
     ]
 
 compare_array_of_images(images)
