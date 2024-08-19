@@ -1,97 +1,59 @@
 <script lang="ts">
+  import CreatePlayerForm from "./CreatePlayerForm.svelte";
+
+  import players from "$lib/store/players";
   import type { Player } from "$lib/types";
 
   let game_state = "creating";
 
-  let known_players: Player[] = [
-    {
-      name: "Fuchs",
-    },
-    {
-      name: "Tippi",
-    },
-    {
-      name: "Samuel",
-    },
-    {
-      name: "Nico",
-    },
-    {
-      name: "Max",
-    },
-    {
-      name: "Lukas",
-    },
-    {
-      name: "Felix",
-    },
-    {
-      name: "Lena",
-    },
-    {
-      name: "Felix",
-    },
-    {
-      name: "Lena",
-    },
-    {
-      name: "Felix",
-    },
-    {
-      name: "Lena",
-    },
-  ];
-  let players: Player[] = [];
+  let selectedPlayers: Player[] = [];
 </script>
 
 <section>
   {#if game_state === "creating"}
     <h3>Players</h3>
 
-    {#if players.length === 0}
+    {#if selectedPlayers.length === 0}
       <div class="hint">No players yet. Pick some below.</div>
     {:else}
       <ul>
-        {#each players as player}
+        {#each selectedPlayers as player}
           <li
             class="player active"
-            on:click={() => (players = players.filter((p) => p !== player))}
+            on:click={() =>
+              (selectedPlayers = selectedPlayers.filter((p) => p !== player))}
           >
-            <span>😐</span><span>{player.name}</span>
+            <span>{player.symbol}</span><span>{player.name}</span>
           </li>
         {/each}
       </ul>
     {/if}
 
     <button
-      disabled={players.length < 1}
+      disabled={selectedPlayers.length < 1}
       on:click={() => (game_state = "playing")}>Start Game</button
     >
 
     <h3>Add Known Player</h3>
 
     <ul>
-      {#each known_players as player}
+      {#each $players as player}
         <li
           class="player"
           on:click={() =>
-            !players.includes(player) && (players = [...players, player])}
+            !selectedPlayers.includes(player) &&
+            (selectedPlayers = [...selectedPlayers, player])}
         >
-          <span>😐</span><span>{player.name}</span>
+          <span>{player.symbol}</span><span>{player.name}</span>
         </li>
       {/each}
     </ul>
 
     <h3>Add New Player</h3>
-
-    <form>
-      <input type="text" placeholder="Name" />
-      <input type="text" placeholder="😐" />
-      <button>Create</button>
-    </form>
+    <CreatePlayerForm></CreatePlayerForm>
   {:else if game_state === "playing"}
     <p>Turn 1</p>
-    <h3>{players[0].name}</h3>
+    <h3>{selectedPlayers[0].name}</h3>
   {/if}
 </section>
 
@@ -143,6 +105,7 @@
     border: none;
     border-radius: 5px;
     width: 100%;
+    min-width: 48px;
     max-width: 12rem;
     margin-inline: auto;
   }
@@ -152,9 +115,9 @@
   }
 
   form {
-    display: flex;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
     gap: 0.5rem;
-    flex-direction: column;
   }
 
   input {
@@ -164,5 +127,6 @@
     background-color: var(--color-bg-1);
     color: var(--color-text);
     border: none;
+    min-width: 1rem;
   }
 </style>
