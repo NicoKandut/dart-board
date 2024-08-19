@@ -21,6 +21,7 @@
   nav {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 3rem;
     background-color: var(--color-bg-1);
   }
 

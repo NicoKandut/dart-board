@@ -18,8 +18,8 @@
     background-color: var(--color-bg-0);
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
   }
 
   main {

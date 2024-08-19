@@ -13,3 +13,7 @@ export const mmToPercent = (point: HitPoint): Point => ({
   x: ((point.x + 170) / 340) * 100,
   y: ((-point.y + 170) / 340) * 100,
 });
+
+export interface Player {
+  name: string;
+}
