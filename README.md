@@ -7,7 +7,7 @@ Dart -> ??? -> Score
 # Wertung/Ergebnis anzeigen/eingeben
 
 ## Web App
-- alles
+        sudo flask --app poc/webservice/service.py run --port=80 --host=0.0.0.0 --reload
 
 ## 7 Segment Display 
 - aktulle Punkte 
