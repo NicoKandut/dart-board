@@ -40,7 +40,9 @@ def init(config: dict):
     global o_status_led
     #o_status_led = Led(conf_gpios['STAUS_LED'])
 
-def main(config: dict, data: dict):
+
+
+def main(config: dict, shm: Array):
     init(config)
 
     while True:

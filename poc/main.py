@@ -1,52 +1,41 @@
+import argparse
+from api.service import main as api_routine
+from dummy_detection.service import main as dummy_det_routine
 from utility_stuff.config_parsing import parseConfigFile
-from shared_memory_dict import SharedMemoryDict
-import dart_detection.service as dds
-#import display_infos.service as dis
-import webservice.service as ws
+from multiprocessing import Process, Array
 
-import threading
-
-data = {
-    "score": 0,
-    "remainding": 0,
-    "player": 0,
-    "game_state": 0,
-    "last_dart_x_pos": 0,
-    "last_dart_y_pos": 0 
-    }
-
-t_dart_detection: threading.Thread = None
-t_display_infos: threading.Thread = None
-t_webservice: threading.Thread = None
-
-
-### FUNCTIONS --------------------------------------------------------------------
-def init():
-    # parsing config file
-    config = parseConfigFile()
-
-    global t_dart_detection 
-    t_dart_detection = threading.Thread(target=dds.main, args=(config, data))
-    
-    global t_display_infos
-    #t_display_infos = threading.Thread(target=dis.main, args=(config, data))
-
-    global t_webservice
-    t_webservice = threading.Thread(target=ws.main, args=(config, data))
-
-    t_dart_detection.start()
-    #t_display_infos.start()
-    t_webservice.start()
-
+det_proc = None
+api_proc = None
 
 ### MAIN -----------------------------------------------------------------
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dummy",action="store_true" )
+    args = parser.parse_args()
 
-    init()
+    config = parseConfigFile()
 
-    t_dart_detection.join()
-    #t_display_infos.join()
-    t_webservice.join()
+    # initialise shared memory
+    shm = Array('i', (0,0,0,0))
+
+
+    # create Processes
+    api_proc = Process(target=api_routine, args=(shm,))
+    if args.dummy:
+        det_proc = Process(target=dummy_det_routine, args=(shm, config['PHOTO']['PHOTO_RESOLUTION']))
+    else:
+        det_proc = None # here we call the real detection routine
+        pass
+
+    # start sub-processes
+    det_proc.start()
+    api_proc.start()
+    
+
+    # wait till detection is closed and then kill all other sub-processes
+    det_proc.join()
+    api_proc.terminate()
+    
 
     
     

@@ -1,13 +1,18 @@
 # dart-board
 Dart -> ??? -> Score
 
+### Starten: detection and api
+        python3 poc/main.py [--dummy]
+>die `--dummy`  flag startet den pygame scorig simulator
+
+### Web App
+        sudo flask --app poc/webservice/service.py run --port=80 --host=0.0.0.0 --reload
+
 # Bedienung
 - über Web App
 
 # Wertung/Ergebnis anzeigen/eingeben
 
-## Web App
-        sudo flask --app poc/webservice/service.py run --port=80 --host=0.0.0.0 --reload
 
 ## 7 Segment Display 
 - aktulle Punkte 
